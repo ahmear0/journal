@@ -1,0 +1,32 @@
+srun --x11 --nodes=1 --time=24:00:00 --pty /bin/bash
+
+
+redcat@case.edu
+
+nomachine client for GUI on the hpcc
+
+
+
+check $PATH to see what packages you have
+module avail
+module avail gives you a list of the packages you have
+
+module load python
+module load python/3.5.2
+module unload python/3.5.2
+
+
+ara47@redcat.case.edu
+
+
+module display python
+
+--time=00:10:00
+-n 1
+--output=python
+
+scontrol show job <#>
+
+
+
+
