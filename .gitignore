@@ -1,4 +1,5 @@
 *.doc
+*.docx
 .DS_Store
 hpccNotes.txt
 
