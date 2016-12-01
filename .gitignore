@@ -2,4 +2,4 @@
 *.docx
 .DS_Store
 hpccNotes.txt
-
+*.class
