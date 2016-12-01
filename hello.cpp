@@ -1,37 +1,62 @@
 #include <iostream>
+#include <string>
+
 using namespace std;
 
 class task
 {
     private:
-        int data1;
-        float data2;
+        int taskId;
+        string taskData;
 
     public:
        
-       void insertIntegerData(int d)
+       void newTask(int _taskId, string _taskData)
        {
-          data1 = d;
-          cout << "Number: " << data1;
+          taskId = _taskId;
+          cout << "Task " << taskId << " created.";
+          taskData = _taskData;
         }
 
-       float insertFloatData()
+       int modifyData(char* _newTaskData)
        {
-           cout << "\nEnter data: ";
-           cin >> data2;
-           return data2;
+          if (taskId == 0)
+          {
+            return 0;
+          }
+          else
+          {
+            taskData = _newTaskData;
+            return 1;
+          }
+        }
+
+        string getData()
+        {
+          return taskData;
+        }
+
+        int getId()
+        {
+          return taskId;
         }
 };
 
  int main()
  {
-      Test o1, o2;
-      float secondDataOfObject2;
-
-      o1.insertIntegerData(12);
-      secondDataOfObject2 = o2.insertFloatData();
-
-      cout << "You entered " << secondDataOfObject2 << "\n";
+      task *t1 = new task;
+      t1->newTask(999,"this is the task data");
+      string *data = new string;
+      data->(t1->getData());
+      cout << data << "\n";
 
       return 0;
+ }
+
+ class todo extends task
+ {
+    public:
+
+    private:
+      
  }
