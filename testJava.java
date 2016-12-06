@@ -13,7 +13,14 @@ public class testJava {
         asheqsJournal.add(new task("eat dinner"));
         asheqsJournal.add(new task("final, december 13", taskType.CAL));
         System.out.println(asheqsJournal);
-        
+        System.out.println();
+        asheqsJournal.remove();
+        System.out.println(asheqsJournal);
+        System.out.println(asheqsJournal.getAllTaskIDs());
+
+        Frame frame = new Frame();  
+        //actually illustrates the frame
+        frame.show();
     }
 
 }

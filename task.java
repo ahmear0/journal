@@ -41,6 +41,11 @@ public class task {
 		_taskType = type;
 	}
 
+	public int getTaskID()
+	{
+		return taskid;
+	}
+
     public String toString() {
 
         return _taskType.name() + " taskid: " + taskid + ", " + content;

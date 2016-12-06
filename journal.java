@@ -18,8 +18,13 @@ public class journal {
 		return true;
 	}
 
+	//remove first item
 	public task remove()
 	{
+		task taskToRemove = taskList.get(0);
+		taskList.remove(0);
+
+		System.out.println("Removing taskid: " + taskToRemove.getTaskID());
 		numtasks--;
 		return taskList.get(0);
 	}
@@ -28,6 +33,20 @@ public class journal {
 	{
 		numtasks = 0;
 	} 
+
+	public String getAllTaskIDs()
+	{
+		String allTasks = "";
+		for (int i = 0; i < numtasks; i++)
+    	{
+    		allTasks += taskList.get(i).getTaskID();
+    		if (i!=numtasks-1)
+    		{
+    			allTasks += ", ";
+    		}
+    	}
+        return allTasks;
+	}
 
     public String toString() {
 
