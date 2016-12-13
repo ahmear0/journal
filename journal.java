@@ -62,4 +62,38 @@ public class journal {
         return taskString;
     }
 
+    public static task parseTask(String toBeParsed)
+    {
+        task _task = null;
+        String parsedString, _content;
+        int _validID;
+        taskType _taskType;
+
+        parsedString = toBeParsed.substring(0,4);
+        if (isValidID(parsedString))
+        {
+            _validID = Integer.parseInt(parsedString);
+            parsedString = toBeParsed.substring(5,9);
+
+            _taskType = taskType.valueOf(parsedString);
+            _content = toBeParsed.substring(10, toBeParsed.length());
+
+            _task = new task(_content, _validID, _taskType);
+        }
+            
+        return _task;
+    }
+
+    public static boolean isValidID(String _id)
+    {
+        if (_id.length() == 4)
+        {
+                if (_id.matches("^[1-9][0-9][0-9][0-9]$"))
+                {
+                    return true;
+                }
+        }
+        return false;
+    }
+
 }

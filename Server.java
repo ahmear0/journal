@@ -7,7 +7,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.lang.Integer;
 
-public class KnockKnockServer {
+public class Server {
 
     private static final int PORTNUMBER = 4321;
     private static final int TASKIDLENGTH = 4;
@@ -18,8 +18,16 @@ public class KnockKnockServer {
         String a2 = "0921";
         String a3 = "4921a";
         String a4 = "49ae";
+        String b1 = "2341 NOTE this is a note";
+        String b2 = "2342 CAL_ this is a note";
 
-        System.out.println(isValidID(a1) + ", " + isValidID(a2) + ", " + isValidID(a3) + ", " + isValidID(a4));
+        System.out.println(journal.isValidID(a1) + ", " + journal.isValidID(a2));
+
+        task task1 = journal.parseTask(b1);
+        task task2 = journal.parseTask(b2);
+
+        System.out.println(task1);
+        System.out.println(task2);
 
         try ( 
             ServerSocket serverSocket = new ServerSocket(PORTNUMBER);
@@ -40,45 +48,37 @@ public class KnockKnockServer {
  
             while ((inputLine = in.readLine()) != null) {
                 out.println(outputLine);
-                parseTasks(inputLine);
+                journal.parseTask(inputLine);
             }
         } catch (IOException e) {
             System.out.println("Exception caught when trying to listen on port "
                 + PORTNUMBER + " or listening for a connection");
             System.out.println(e.getMessage());
         }
-    }
 
-    private static ArrayList<task> parseTasks(String toBeParsed)
-    {
-        ArrayList<task> tasks = new ArrayList<task>();
-        String parsedString;
-        while (toBeParsed.equals("") != true && toBeParsed != null)
-        {
-            parsedString = toBeParsed.substring(0,4);
-            System.out.println(parsedString);
 
-        }
-        return tasks;
-    }
 
-    private static boolean isValidID(String _id)
-    {
-        if (_id.length() == 4)
-        {
-                if (_id.matches("^[1-9][0-9][0-9][0-9]$"))
-                {
-                    return true;
-                }
-        }
-        return false;
+                // while (server_is_running)
+        // {
+        //     //Listen for any data
+        //     //once data is given
+
+        //     //parse out taskids
+        //     int[] taskids;
+
+        //     //check if taskid's are already in the journal
+
+        //     //if some are absent from serverJournal, instantiate them using journal.add(new task("..."))
+        //     if()
+        //     {
+        //         pthread_create(...);
+        //     }
+        //     //if some are missing, remove them
+        //     if()
+        //     {
+        //         pthread_create(...);
+        //     }
+            
+        // }
     }
 }
-
-
-
-
-
-
-
-

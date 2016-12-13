@@ -51,4 +51,8 @@ public class task {
         return _taskType.name() + " taskid: " + taskid + ", " + content;
     }
 
+    public String toServer() {
+    	return "" + taskid + " " + _taskType.name() + " " + content;
+    }
+
 }

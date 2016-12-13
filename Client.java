@@ -1,8 +1,11 @@
-
-import java.io.*;
-import java.net.*;
+import java.net.Socket;
+import java.net.UnknownHostException;
+import java.io.PrintWriter;
+import java.io.BufferedReader;
+import java.io.InputStreamReader;
+import java.io.IOException;
  
-public class KnockKnockClient {
+public class Client {
 	
 	private static final String HOST = "127.0.0.1";
 	private static final int PORTNUMBER = 4321;
@@ -40,5 +43,62 @@ public class KnockKnockClient {
                 HOST);
             System.exit(1);
         }
+
+        //this is the server's copy of the journal
+        // clientJournal; = new journal();
+
+        // while(user_is_using)
+        // {
+        //     //if user selects new task, 
+        //     //make a new thread
+        //     //take user input for task parameters
+        //     if()
+        //     {
+        //         pthread_create(...);
+        //     }
+        //     //put this line in a runner//clientJournal.add(new task(...));
+
+        //     //if user selects remove task
+        //     else if()
+        //     {
+        //         pthread_create(...);
+        //     }
+        //     //put this line in a runner//clientJournal.remove(taskid);
+
+        //     //user is done
+        //     else if()
+        //     {
+        //         //break
+        //     }
+        // }
+
+        // //open a connection to the socket using Java socket.
+        // //127.0.0.1 4321
+
+        // while (server_is_running)
+        // {
+        //     //Listen for any data
+        //     //once data is given
+
+        //     //parse out taskids
+        //     int[] taskids;
+
+        //     //check if taskid's are already in the journal
+
+        //     //if some are absent from serverJournal, instantiate them using journal.add(new task("..."))
+        //     if()
+        //     {
+        //         pthread_create(...);
+        //     }
+        //     //if some are missing, remove them
+        //     if()
+        //     {
+        //         pthread_create(...);
+        //     }
+        // }
+        // //handle exceptions and errors associated with sockets
+
+
+
     }
 }

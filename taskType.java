@@ -2,7 +2,7 @@
 public enum taskType{
 
 		TODO,
-		CAL,
+		CAL_,
 		NOTE
 	
 	}
