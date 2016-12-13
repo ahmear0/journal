@@ -1,30 +1,17 @@
+
 import java.io.*;
 import java.net.*;
  
 public class KnockKnockClient {
-    public static void main(String[] args) throws IOException {
-         
-        if (args.length == 1) {
-            System.out.println(
-                "Specificed Usage: java EchoClient localhost <port>");
-        }
-        else if (args.length == 2 ) {
-            System.out.println("Specificed Usage: java EchoClient <host> <port>");
-        }
-        else
-        {
-            System.exit(1);
-        }
-        
-        //local address
-        String hostName = "127.0.0.1";
+	
+	private static final String HOST = "127.0.0.1";
+	private static final int PORTNUMBER = 4321;
 
-        //parameter for other address
-        //String hostName = args[0];
-        int portNumber = Integer.parseInt(args[0]);
+    public static void main(String[] args) throws IOException {
+ 	
  
         try (
-            Socket kkSocket = new Socket(hostName, portNumber);
+            Socket kkSocket = new Socket(HOST, PORTNUMBER);
             PrintWriter out = new PrintWriter(kkSocket.getOutputStream(), true);
             BufferedReader in = new BufferedReader(
                 new InputStreamReader(kkSocket.getInputStream()));
@@ -46,11 +33,11 @@ public class KnockKnockClient {
                 }
             }
         } catch (UnknownHostException e) {
-            System.err.println("Don't know about host " + hostName);
+            System.err.println("Don't know about host " + HOST);
             System.exit(1);
         } catch (IOException e) {
             System.err.println("Couldn't get I/O for the connection to " +
-                hostName);
+                HOST);
             System.exit(1);
         }
     }
