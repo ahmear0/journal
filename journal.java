@@ -19,33 +19,80 @@ public class journal {
 	}
 
 	//remove first item
-	public task remove()
+	public int remove()
 	{
-		task taskToRemove = taskList.get(0);
-		taskList.remove(0);
+		int taskIDToRemove = -1;
+		if (numtasks>0)
+		{
+			taskIDToRemove = taskList.get(0).getTaskID();
+			taskList.remove(0);
 
-		System.out.println("Removing taskid: " + taskToRemove.getTaskID());
-		numtasks--;
-		return taskList.get(0);
+			System.out.println("Removing taskid: " + taskIDToRemove + "\n");
+			numtasks--;
+		}
+		return taskIDToRemove;
 	}
+
+	public int remove(int taskID)
+	{
+		int removeIndex = -1;
+		int[] allTaskIDs = getAllTaskIDs();
+		for (int i = 0; i < numtasks; i++)
+		{
+			if (allTaskIDs[i] == taskID)
+			{
+				i = removeIndex;
+			}
+		}
+
+		if (removeIndex >= 0)
+		{
+			task taskToRemove = taskList.get(removeIndex);
+			taskList.remove(removeIndex);
+
+			System.out.println("Removing taskid: " + taskToRemove.getTaskID() + "\n");
+			numtasks--;
+			return taskToRemove.getTaskID();
+		}
+		else
+		{
+			System.out.println("taskid " + taskID + " doesn't exist.");
+		}
+		return -1;
+	}
+
 
 	public void clear()
 	{
+		taskList = null;
 		numtasks = 0;
 	} 
 
-	public String getAllTaskIDs()
+	public int[] getAllTaskIDs()
 	{
-		String allTasks = "";
+		
+		int[] allTaskIDs = new int[numtasks];
+
 		for (int i = 0; i < numtasks; i++)
     	{
-    		allTasks += taskList.get(i).getTaskID();
-    		if (i!=numtasks-1)
-    		{
-    			allTasks += ", ";
-    		}
+    		allTaskIDs[i] = taskList.get(i).getTaskID();
     	}
-        return allTasks;
+        return allTaskIDs;
+	}
+
+	public String allTaskIDs_toString()
+	{
+		String taskIDsString = "";
+		int[] taskIDs = getAllTaskIDs();
+		for (int i = 0; i < taskIDs.length; i++)
+		{
+			taskIDsString += taskIDs[i];
+			if (i<taskIDs.length-1)
+			{
+				taskIDsString += ", ";
+			}
+		}
+		return taskIDsString;
 	}
 
     public String toString() {
