@@ -21,7 +21,7 @@ public class Client {
 
     public static void main(String args[]) throws IOException {
         if (args.length != 1) {
-            System.err.println("Usage: java test <port>");
+            System.err.println("Usage: java Client <port>");
             System.exit(1);
         }
  
@@ -79,10 +79,12 @@ public class Client {
                 else if (userInput.equals("add"))
                 {
                     System.out.println("Enter task content:");
+                    System.out.print("add >");
                     userInput = stdin.readLine();
                     String _content = userInput;
 
                     System.out.println("Enter task type [TODO, NOTE, CAL_]:");
+                    System.out.print("add >");
                     userInput = stdin.readLine();
                     try {
                         taskType _taskType = taskType.valueOf(userInput);
@@ -92,9 +94,6 @@ public class Client {
 
                         if (serverSync)
                         {
-                            socketText = in.readLine();
-                            System.out.println(socketText);
-                            System.out.println(_newTask.toServer());
                             out.println(_newTask.toServer());
                         }
 
@@ -116,6 +115,10 @@ public class Client {
                     else if (userArgument ==null)
                     {
                         j.remove();
+                        if (serverSync)
+                        {
+                            out.println("-");
+                        }
                     }
                     else
                     {
@@ -128,6 +131,10 @@ public class Client {
                 else if (userInput.equals("removeAll"))
                 {
                     j.clear();
+                    if (serverSync)
+                    {
+                        out.println("--");
+                    }
                 }
 
                 //display
