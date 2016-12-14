@@ -13,18 +13,14 @@ import java.lang.Integer;
 
 public class Server {
 
-    static journal serverj;
+    static journal serverJournal;
     static boolean running;
     private static final String FILENAME = ".serverData";
+    private static int PORTNUMBER;
 
     public static void main(String[] args) throws IOException {
-        // fw = new FileWriter(FILENAME);
 
-        //BufferedReader bw = new BufferedReader(fw);
-        //bw.readLine();
-
-
-        serverj = new journal();
+        serverJournal = new journal();
         running = true;
 
         if (args.length != 1) {
@@ -32,7 +28,7 @@ public class Server {
             System.exit(1);
         }
  
-        int PORTNUMBER = Integer.parseInt(args[0]);
+        PORTNUMBER = Integer.parseInt(args[0]);
 
         try ( 
             ServerSocket serverSocket = new ServerSocket(PORTNUMBER);
@@ -48,29 +44,38 @@ public class Server {
                     new BufferedReader(new InputStreamReader(System.in)); 
         ) {
             String userInput,input,output;
-            System.out.print("Server is running.");
+            System.out.println("Server is running.");
+            loadServerData();
+
             do 
             {
-                System.out.println("Enter [read, display, exit]:");
+                System.out.println("Enter [read, display, save, exit]:");
                 System.out.print("server >");
                 userInput = stdin.readLine();
+                
+
                 if (userInput != null && userInput.equals("read"))
                 {
-                    System.out.println("Reading localhost" + PORTNUMBER + "...");
+                    System.out.println("Accessing socket localhost : " + PORTNUMBER + "...");
                     input = inStream.readLine();
                     try {
                         if (input.equals("-"))
                         {
-                            serverj.remove();
+                            serverJournal.remove();
                         }
                         else if (input.equals("--"))
                         {
-                            serverj.clear();
+                            serverJournal.clear();
+                        }
+                        else if (input.equals("pull"))
+                        {
+                            sendServerDataToSocket(outStream);
+                            outStream.close();
                         }
                         else 
                         {
-                            task newTask = serverj.parseTask(input);
-                            serverj.add(newTask);
+                            task newTask = serverJournal.parseTask(input);
+                            serverJournal.add(newTask);
                         }
                     } catch (NullPointerException e)
                     {
@@ -78,6 +83,11 @@ public class Server {
                     }
                 }
                 
+                else if (userInput != null && userInput.equals("save"))
+                {
+                    writeServerData();
+                }
+
                 else if (userInput != null && userInput.equals("exit"))
                 {
                     System.out.println("Bye.");
@@ -86,7 +96,7 @@ public class Server {
 
                 else if (userInput.equals("display"))
                 {
-                    System.out.println(serverj);
+                    System.out.println(serverJournal);
                 }
 
             } while (running);
@@ -97,5 +107,55 @@ public class Server {
             System.out.println(e.getMessage());
         }
 
+    }
+
+    private static void loadServerData()
+    {
+        task tempTask;
+
+        try (BufferedReader br = new BufferedReader(new FileReader(FILENAME))) {
+
+            String sCurrentLine;
+
+            while ((sCurrentLine = br.readLine()) != null) {
+                tempTask = serverJournal.parseTask(sCurrentLine);
+                serverJournal.add(tempTask);
+            }
+
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    //write serverData to local file
+    private static void writeServerData()
+    {
+        try (BufferedWriter bw = new BufferedWriter(new FileWriter(FILENAME))) {
+
+            task currentTask;
+            int numTasks = serverJournal.getNumTasks();
+            for (int i = 0; i < numTasks; i++)
+                {
+                    currentTask = serverJournal.remove();
+                    bw.write(currentTask.toServer());
+                    bw.newLine();
+                }
+            bw.close();
+
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    //write serverData to socket
+    private static void sendServerDataToSocket(PrintWriter outStream)
+    {
+            task currentTask;
+            int numTasks = serverJournal.getNumTasks();
+            for (int i = 0; i < numTasks; i++)
+                {
+                    currentTask = serverJournal.remove();
+                    outStream.println(currentTask.toServer());
+                }
     }
 }

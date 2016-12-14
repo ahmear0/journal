@@ -32,7 +32,7 @@ public class journal {
 			removedTask = taskList.get(0);
 			taskList.remove(0);
 
-			System.out.println("Removing taskid: " + removedTask.getTaskID() + "\n");
+			System.out.println("Removing taskid: " + removedTask.getTaskID());
 			numtasks--;
 		}
 		return removedTask;
@@ -104,11 +104,18 @@ public class journal {
     public String toString() {
 
     	String taskString = "+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++\n";
+    	
+    	if (numtasks == 0)
+    	{
+    		taskString += "  [empty]\n";
+    	}
     	for (int i = 0; i < numtasks; i++)
     	{
     		taskString += "+ " + taskList.get(i).toString();
 			taskString += "\n";
     	}
+
+
     	taskString += "+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++\n";
         return taskString;
     }

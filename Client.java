@@ -17,7 +17,7 @@ public class Client {
 
     static boolean running, serverSync;
     static journal j;
-    static final String helpString = ">please make a selection [display, add, remove, remove <id>, removeAll, populate, help, sync, exit]";
+    static final String helpString = ">please make a selection [display, add, remove, remove <id>, removeAll, populate, help, load, sync, exit]";
 
     public static void main(String args[]) throws IOException {
         if (args.length != 1) {
@@ -73,6 +73,21 @@ public class Client {
                         System.out.println("Client will write changes to Socket.");
                     }
                     
+                }
+
+                else if (userInput.equals("load"))
+                {
+                    task tempTask;
+
+                    String sCurrentLine;
+
+                    while ((sCurrentLine = in.readLine()) != null) {
+                        System.out.println(sCurrentLine);
+                        tempTask = j.parseTask(sCurrentLine);
+                        j.add(tempTask);
+
+                    }
+                    System.out.println("GOT HERE");
                 }
 
                 //add
@@ -145,12 +160,17 @@ public class Client {
 
                 else if (userInput.equals("populate"))
                 {
-                    j.add(new task("buy groceries", taskType.TODO));
-                    j.add(new task("clean room", taskType.TODO));
-                    j.add(new task("wash car", taskType.TODO));
-                    j.add(new task("gb meeting 12/7/16", taskType.CAL_));
-                    j.add(new task("locker combo is 10-20-30", taskType.NOTE));
-                    j.add(new task("eecs 338 project due, 12/13/16", taskType.CAL_));
+                    if (serverSync)
+                    {
+                        out.println("pull");
+                    }
+                    
+                    // j.add(new task("buy groceries", taskType.TODO));
+                    // j.add(new task("clean room", taskType.TODO));
+                    // j.add(new task("wash car", taskType.TODO));
+                    // j.add(new task("gb meeting 12/7/16", taskType.CAL_));
+                    // j.add(new task("locker combo is 10-20-30", taskType.NOTE));
+                    // j.add(new task("eecs 338 project due, 12/13/16", taskType.CAL_));
                 }
 
                 else if (userInput.equals("exit"))
