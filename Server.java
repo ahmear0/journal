@@ -9,76 +9,59 @@ import java.lang.Integer;
 
 public class Server {
 
-    private static final int PORTNUMBER = 4321;
-    private static final int TASKIDLENGTH = 4;
+    static journal serverj;
+    static boolean running;
 
     public static void main(String[] args) throws IOException {
+        serverj = new journal();
+        running = true;
 
-        String a1 = "4921";
-        String a2 = "0921";
-        String a3 = "4921a";
-        String a4 = "49ae";
-        String b1 = "2341 NOTE this is a note";
-        String b2 = "2342 CAL_ this is a note";
-
-        System.out.println(journal.isValidID(a1) + ", " + journal.isValidID(a2));
-
-        task task1 = journal.parseTask(b1);
-        task task2 = journal.parseTask(b2);
-
-        System.out.println(task1);
-        System.out.println(task2);
+        if (args.length != 1) {
+            System.err.println("Usage: java Server <port>");
+            System.exit(1);
+        }
+ 
+        int PORTNUMBER = Integer.parseInt(args[0]);
 
         try ( 
             ServerSocket serverSocket = new ServerSocket(PORTNUMBER);
 
             Socket clientSocket = serverSocket.accept();
 
-            PrintWriter out =
+            PrintWriter outStream =
                 new PrintWriter(clientSocket.getOutputStream(), true);
 
-            BufferedReader in = new BufferedReader(
+            BufferedReader inStream = new BufferedReader(
                 new InputStreamReader(clientSocket.getInputStream()));
+            BufferedReader stdin =
+                    new BufferedReader(new InputStreamReader(System.in)); 
         ) {
-         
-            String inputLine = "5436 NOTE: hello this is a note";
-            String outputLine = "The Server.java file wrote this";
-            
-            out.println(outputLine);
- 
-            while ((inputLine = in.readLine()) != null) {
-                out.println(outputLine);
-                journal.parseTask(inputLine);
-            }
+            String userInput,input,output;
+            System.out.print("Server is running.");
+            do 
+            {
+                System.out.println("Enter [read, exit]:");
+                userInput = stdin.readLine();
+                if (userInput != null && userInput.equals("read"))
+                {
+                    System.out.println("Reading localhost" + PORTNUMBER + "...");
+                    input = inStream.readLine();
+                    System.out.println("Client said " + input);
+                }
+                
+                else if (userInput != null && userInput.equals("exit"))
+                {
+                    System.out.println("Bye.");
+                    System.exit(1);
+                }
+
+            } while (running);
+
         } catch (IOException e) {
             System.out.println("Exception caught when trying to listen on port "
                 + PORTNUMBER + " or listening for a connection");
             System.out.println(e.getMessage());
         }
 
-
-
-                // while (server_is_running)
-        // {
-        //     //Listen for any data
-        //     //once data is given
-
-        //     //parse out taskids
-        //     int[] taskids;
-
-        //     //check if taskid's are already in the journal
-
-        //     //if some are absent from serverJournal, instantiate them using journal.add(new task("..."))
-        //     if()
-        //     {
-        //         pthread_create(...);
-        //     }
-        //     //if some are missing, remove them
-        //     if()
-        //     {
-        //         pthread_create(...);
-        //     }
-            
-        // }
     }
 }

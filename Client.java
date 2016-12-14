@@ -1,104 +1,161 @@
+//asheq
+import java.util.ArrayList;
+import java.lang.Integer;
+import java.lang.IllegalArgumentException;
+
 import java.net.Socket;
 import java.net.UnknownHostException;
 import java.io.PrintWriter;
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
 import java.io.IOException;
- 
-public class Client {
-	
-	private static final String HOST = "127.0.0.1";
-	private static final int PORTNUMBER = 4321;
 
-    public static void main(String[] args) throws IOException {
- 	
- 
-        try (
-            Socket kkSocket = new Socket(HOST, PORTNUMBER);
-            PrintWriter out = new PrintWriter(kkSocket.getOutputStream(), true);
-            BufferedReader in = new BufferedReader(
-                new InputStreamReader(kkSocket.getInputStream()));
-        ) {
-            BufferedReader stdIn =
-                new BufferedReader(new InputStreamReader(System.in));
-            String fromServer;
-            String fromUser;
- 
-            while ((fromServer = in.readLine()) != null) {
-                System.out.println("Server: " + fromServer);
-                if (fromServer.equals("Bye."))
-                    break;
-                 
-                fromUser = stdIn.readLine();
-                if (fromUser != null) {
-                    System.out.println("Client: " + fromUser);
-                    out.println(fromUser);
-                }
-            }
-        } catch (UnknownHostException e) {
-            System.err.println("Don't know about host " + HOST);
-            System.exit(1);
-        } catch (IOException e) {
-            System.err.println("Couldn't get I/O for the connection to " +
-                HOST);
+public class Client {
+
+    private static final String HOST = "127.0.0.1";
+    //private static final int PORTNUMBER = 4321;
+
+    static boolean running, serverSync;
+    static journal j;
+    static final String helpString = ">please make a selection [display, add, remove, remove <id>, removeAll, populate, help, sync, exit]";
+
+    public static void main(String args[]) throws IOException {
+        if (args.length != 1) {
+            System.err.println("Usage: java test <port>");
             System.exit(1);
         }
+ 
+        int PORTNUMBER = Integer.parseInt(args[0]);
 
-        //this is the server's copy of the journal
-        // clientJournal; = new journal();
+        running = true;
+        serverSync = true;
+        String userInput, socketText, userArgument = null;
+        String[] userInputArguments;
+        journal j = new journal();
+        System.out.println(helpString);
 
-        // while(user_is_using)
-        // {
-        //     //if user selects new task, 
-        //     //make a new thread
-        //     //take user input for task parameters
-        //     if()
-        //     {
-        //         pthread_create(...);
-        //     }
-        //     //put this line in a runner//clientJournal.add(new task(...));
+        try 
+            (
+                Socket socket = new Socket(HOST, PORTNUMBER);
+                PrintWriter out = new PrintWriter(socket.getOutputStream(), true);
+                BufferedReader in = new BufferedReader(
+                new InputStreamReader(socket.getInputStream()));
+                BufferedReader stdin =
+                    new BufferedReader(new InputStreamReader(System.in));    
+            )
+            {
+            do {
+            
+                System.out.print(">");
+                userInput = stdin.readLine();
+                userInputArguments = userInput.split(" ");
+                if (userInputArguments.length>1)
+                {
+                    userInput = userInputArguments[0];
+                    userArgument = userInputArguments[1];
+                }
 
-        //     //if user selects remove task
-        //     else if()
-        //     {
-        //         pthread_create(...);
-        //     }
-        //     //put this line in a runner//clientJournal.remove(taskid);
+                if (userInput.equals("help"))
+                {
+                    System.out.println(helpString);
+                }
 
-        //     //user is done
-        //     else if()
-        //     {
-        //         //break
-        //     }
-        // }
+                else if (userInput.equals("sync"))
+                {
+                    if (serverSync)
+                    {
+                        serverSync = false;
+                        System.out.println("Client will no longer write changes to Socket.");
+                    }
+                    else
+                    {
+                        serverSync = true;
+                        System.out.println("Client will write changes to Socket.");
+                    }
+                    
+                }
 
-        // //open a connection to the socket using Java socket.
-        // //127.0.0.1 4321
+                //add
+                else if (userInput.equals("add"))
+                {
+                    System.out.println("Enter task content:");
+                    userInput = stdin.readLine();
+                    String _content = userInput;
 
-        // while (server_is_running)
-        // {
-        //     //Listen for any data
-        //     //once data is given
+                    System.out.println("Enter task type [TODO, NOTE, CAL_]:");
+                    userInput = stdin.readLine();
+                    try {
+                        taskType _taskType = taskType.valueOf(userInput);
 
-        //     //parse out taskids
-        //     int[] taskids;
+                        task _newTask = new task(_content, _taskType);
+                        j.add(_newTask);
 
-        //     //check if taskid's are already in the journal
+                        if (serverSync)
+                        {
+                            socketText = in.readLine();
+                            System.out.println(socketText);
+                            System.out.println(_newTask.toServer());
+                            out.println(_newTask.toServer());
+                        }
 
-        //     //if some are absent from serverJournal, instantiate them using journal.add(new task("..."))
-        //     if()
-        //     {
-        //         pthread_create(...);
-        //     }
-        //     //if some are missing, remove them
-        //     if()
-        //     {
-        //         pthread_create(...);
-        //     }
-        // }
-        // //handle exceptions and errors associated with sockets
+                    }catch (IllegalArgumentException e) 
+                    {
+                        System.out.println("Usage: <taskType>");
+                    }
 
+                }
 
+                //remove
+                else if (userInput.equals("remove"))
+                {
+                    if (userArgument!=null && j.isValidID(userArgument))
+                    {
+                        int taskid = Integer.parseInt(userArgument);
+                        j.remove(taskid);
+                    }
+                    else if (userArgument ==null)
+                    {
+                        j.remove();
+                    }
+                    else
+                    {
+                        System.out.println("Usage: remove <taskid>");
+                    }
+                    userArgument = null;
+                }
 
+                //removeAll
+                else if (userInput.equals("removeAll"))
+                {
+                    j.clear();
+                }
+
+                //display
+                else if (userInput.equals("display"))
+                {
+                    System.out.println(j);
+                }
+
+                else if (userInput.equals("populate"))
+                {
+                    j.add(new task("buy groceries", taskType.TODO));
+                    j.add(new task("clean room", taskType.TODO));
+                    j.add(new task("wash car", taskType.TODO));
+                    j.add(new task("gb meeting 12/7/16", taskType.CAL_));
+                    j.add(new task("locker combo is 10-20-30", taskType.NOTE));
+                    j.add(new task("eecs 338 project due, 12/13/16", taskType.CAL_));
+                }
+
+                else if (userInput.equals("exit"))
+                {
+                    running = false;
+                }
+            } while (running);
+
+            } catch (IOException e) 
+            {
+                e.printStackTrace();
+                System.exit(1);
+            }         
     }
 }
