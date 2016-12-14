@@ -2,9 +2,7 @@ import java.net.ServerSocket;
 import java.net.Socket;
 import java.io.PrintWriter;
 import java.io.BufferedReader;
-import java.io.FileReader;
 import java.io.BufferedWriter;
-import java.io.FileWriter;
 import java.io.InputStreamReader;
 import java.io.IOException;
 import java.lang.NullPointerException;
@@ -19,8 +17,17 @@ public class Server {
     private static int PORTNUMBER;
 
     public static void main(String[] args) throws IOException {
+<<<<<<< HEAD
 
         serverJournal = new journal();
+=======
+        // fw = new FileWriter(FILENAME);
+        // bw = new BufferedReader(new InputStreamReader(fw));
+        // bw.readLine();
+
+
+        serverj = new journal();
+>>>>>>> parent of b4733a3... cleanup?
         running = true;
 
         if (args.length != 1) {
