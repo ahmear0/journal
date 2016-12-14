@@ -11,6 +11,11 @@ public class journal {
 		numtasks = 0;
 	}
 
+	public int getNumTasks()
+	{
+		return numtasks;
+	}
+
 	public boolean add(task _task)
 	{
 		taskList.add(_task);
@@ -19,18 +24,18 @@ public class journal {
 	}
 
 	//remove first item
-	public int remove()
+	public task remove()
 	{
-		int taskIDToRemove = -1;
+		task removedTask = null;
 		if (numtasks>0)
 		{
-			taskIDToRemove = taskList.get(0).getTaskID();
+			removedTask = taskList.get(0);
 			taskList.remove(0);
 
-			System.out.println("Removing taskid: " + taskIDToRemove + "\n");
+			System.out.println("Removing taskid: " + removedTask.getTaskID() + "\n");
 			numtasks--;
 		}
-		return taskIDToRemove;
+		return removedTask;
 	}
 
 	public int remove(int taskID)
