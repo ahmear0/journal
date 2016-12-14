@@ -35,13 +35,14 @@ public class journal {
 
 	public int remove(int taskID)
 	{
+
 		int removeIndex = -1;
 		int[] allTaskIDs = getAllTaskIDs();
 		for (int i = 0; i < numtasks; i++)
 		{
 			if (allTaskIDs[i] == taskID)
 			{
-				i = removeIndex;
+				removeIndex = i;
 			}
 		}
 
@@ -50,7 +51,7 @@ public class journal {
 			task taskToRemove = taskList.get(removeIndex);
 			taskList.remove(removeIndex);
 
-			System.out.println("Removing taskid: " + taskToRemove.getTaskID() + "\n");
+			System.out.println("Removing taskid: " + taskToRemove.getTaskID());
 			numtasks--;
 			return taskToRemove.getTaskID();
 		}
@@ -64,7 +65,7 @@ public class journal {
 
 	public void clear()
 	{
-		taskList = null;
+		taskList = new ArrayList<task>();
 		numtasks = 0;
 	} 
 
@@ -97,15 +98,13 @@ public class journal {
 
     public String toString() {
 
-    	String taskString = "";
+    	String taskString = "+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++\n";
     	for (int i = 0; i < numtasks; i++)
     	{
-    		taskString += taskList.get(i).toString();
-    		if (i!=numtasks-1)
-    		{
-    			taskString += "\n";
-    		}
+    		taskString += "+ " + taskList.get(i).toString();
+			taskString += "\n";
     	}
+    	taskString += "+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++\n";
         return taskString;
     }
 
