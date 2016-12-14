@@ -7,7 +7,4 @@ all:
 	javac taskType.java
 	javac journal.java
 
-	javac test.java
-	javac Frame.java
-	javac Panel.java
 
