@@ -1,5 +1,7 @@
 all:
-
+	
+	javac Frame.java
+	javac Panel.java
 	javac Client.java
 	javac Server.java
 	javac test.java
